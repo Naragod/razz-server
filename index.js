@@ -5,7 +5,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const randomizer = require('./randomizer/randomizer');
 const environment = require('./config');
-const port = environment.port;
+const port = environment.port == null || environment.port == "" ? 8000 : environment.port;
 
 
 app.use(bodyParser.json());
