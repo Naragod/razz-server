@@ -5,11 +5,15 @@ const app = express();
 const bodyParser = require('body-parser');
 const randomizer = require('./randomizer/randomizer');
 const environment = require('./config');
-const port = environment.port == null || environment.port == "" ? 8000 : environment.port;
+const port = process.env.PORT || 8000;
 
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+
+app.get('/', (req, res) => {
+    res.send("<h1>This is a test</h1>");
+});
 
 app.post('/trueRandomNumber', (req, res) => {
     let min = req.body.min || 0;
