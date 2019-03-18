@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/', (req, res) => {
-    res.send("<h1>This is a test</h1>");
+    res.send("<h1>This is a test. I am listening on port:", port, "</h1>");
 });
 
 app.post('/trueRandomNumber', (req, res) => {
