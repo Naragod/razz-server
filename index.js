@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const randomizer = require('./randomizer/randomizer');
 const environment = require('./config');
 const port = environment.remote.port || 8000;
-const router = require('./route_modules/router')
+const router = require('./route_modules/router');
 const cors = require('cors');
 
 // middleware
