@@ -6,7 +6,8 @@ const app = express();
 const bodyParser = require('body-parser');
 const randomizer = require('./randomizer/randomizer');
 const environment = require('./config');
-const port = environment.local.port || 8000;
+const port = environment.remote.port || 8000;
+const router = require('./route_modules/router')
 const cors = require('cors');
 
 // middleware

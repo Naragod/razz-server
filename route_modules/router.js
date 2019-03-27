@@ -4,12 +4,13 @@
 // ****************************************************************************
 const express = require("express");
 const router = express.Router();
+const randomizer = require('../randomizer/randomizer')
 const env = require('../config');
 
 // get requests
 // ****************************************************************************
 router.get('/', (req, res) => {
-    res.send("<h1>This is a test. I am listening on port:", port, "</h1>");
+    res.send("<h1>This is a test.</h1>");
 });
 
 router.get('/date', (req, res) => {
