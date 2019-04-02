@@ -8,7 +8,7 @@ module.exports = {
             throw {
                 error: "Error: Request Failed.",
                 response: res
-            }
+            };
         }
     }
 }

@@ -1,22 +1,36 @@
 
-
 // variables
 // ****************************************************************************
 const express = require("express");
 const router = express.Router();
 const randomizer = require('../randomizer/randomizer');
 const fetch = require('node-fetch');
-const helper = require('./useful-middleware');
+const useful_middleware = require('./useful-middleware');
 const env = require('../config');
+const dbhandler = require('../route_modules/dbhandler');
+const helper = require('../helper');
+ 
+ 
+// configuration
+// ****************************************************************************
+let user = "postgres";
+let password = "pass";
+let host = "localhost";
+let port = "5432";
+let db = "raffle";
 
-
-
+let configDb = {
+    connectionString: `postgresql://${user}:${password}@${host}:${port}/${db}`
+}
+let connection = dbhandler.setClientConnection(configDb);
+ 
+ 
 // get requests
 // ****************************************************************************
 router.get('/', (req, res) => {
     res.send("<h1>This is a test.</h1>");
 });
-
+ 
 router.get('/date', (req, res) => {
     let baseURL = env.time.base;
     let delimiter = "/";
@@ -30,8 +44,8 @@ router.get('/date', (req, res) => {
         baseURL += `${country}${delimiter}`;
     }
     baseURL = `${baseURL}${city}`;
-
-    fetch(baseURL, {method: 'GET'}).then(helper.checkStatus)
+ 
+    fetch(baseURL, {method: 'GET'}).then(useful_middleware.checkStatus)
     .then(response => response.json())
     .then(response => {
         res.send(response);
@@ -40,7 +54,7 @@ router.get('/date', (req, res) => {
         console.log(err);
     });
 });
-
+ 
 router.get('/trueRandomNumber', (req, res) => {
     let min = req.body.min || 2;
     let max = req.body.max || 12;
@@ -49,9 +63,43 @@ router.get('/trueRandomNumber', (req, res) => {
     console.log("Api call:", result);
     res.send(result);
 });
+ 
+router.get('/testdb', (req, res) => {
+    res.send(connection);
+});
 
+router.get('/getTable', (req, res) => {
+    let table = req.query.table;
+    let response = dbhandler.query(connection, "select * from " + table);
+    response.then(r => {
+        console.log(r.rows);
+        res.send(r.rows);
+    });
+});
+ 
 // post requests
 // ****************************************************************************
+ 
+router.post('/saveToTable', (req, res) => {
+    let table = req.body.table;
+    let columns = req.body.columns;
+    let data = req.body.data;
+    // let query = `insert into ${table} (${columns.join(',')}) ` +
+    //             `values ${data.map(v => {
+    //                 return '(' + v.values.map(v => `'${v}'`).join(',') + ')';
+    //             })}`;
 
+    let insertInto = `insert into ${table} (${columns.join(',')}) ` +
+                    `VALUES (${columns.map((e, i) => "$" + (i + 1)).join(',')}) RETURNING *`;
 
+    // console.log("query:", query);
+    console.log("insertInto:", insertInto);
+    dbhandler.insert(connection, insertInto, data[0].values);
+    let response = dbhandler.query(connection, "select * from participant");
+    response.then(r => {
+        console.log("Row inserted:",  r.rows);
+    });
+    res.send("saved to table:", table, "query:", query);
+});
+ 
 module.exports = router;
