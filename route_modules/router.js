@@ -9,6 +9,7 @@ const useful_middleware = require('./useful-middleware');
 const env = require('../config');
 const dbhandler = require('../route_modules/dbhandler');
 const helper = require('../helper');
+const observable = require('./observable');
  
  
 // configuration
@@ -92,7 +93,7 @@ router.post('/saveToTable', (req, res) => {
     let insertInto = `insert into ${table} (${columns.join(',')}) ` +
                     `VALUES (${columns.map((e, i) => "$" + (i + 1)).join(',')}) RETURNING *`;
 
-    // console.log("query:", query);
+    // console.log("query:", query);clear
     console.log("insertInto:", insertInto);
     dbhandler.insert(connection, insertInto, data[0].values);
     let response = dbhandler.query(connection, "select * from participant");
@@ -101,5 +102,24 @@ router.post('/saveToTable', (req, res) => {
     });
     res.send("saved to table:", table, "query:", query);
 });
- 
+
+router.post('/randomizeList', (req, res) => {
+    let raffleList = req.body.raffleList;
+    let rollNumber = req.body.rollNumber;
+    let rollResults = [];
+
+    while(rollNumber > 0){
+        raffleList = randomizer.shuffle(raffleList);
+        rollResults.push({
+            // deep copy
+            result: JSON.parse(JSON.stringify(raffleList)),
+            rollNumber: rollNumber
+        });
+        
+        rollNumber --;
+    }
+
+    res.send({rollResults: rollResults});
+});
+
 module.exports = router;

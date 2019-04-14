@@ -31,9 +31,9 @@ module.exports = {
             client.query(into, values, (err, res) => {
                 if(err){
                     console.log("Cound not insert:", err);
-                    reject(err)
+                    reject(err);
                 }
-                resolve(res)
+                resolve(res);
             });
         });
     },
