@@ -1,10 +1,10 @@
 
 // variables
 // ****************************************************************************
-const express = require('express');
-const app = express();
+const app = require('express')();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 const bodyParser = require('body-parser');
-const randomizer = require('./randomizer/randomizer');
 const environment = require('./config');
 const port = environment.remote.port || 8000;
 const router = require('./route_modules/router');
@@ -17,8 +17,15 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors());
 app.use(router);
 
+io.on('connection', (socket) => {
+    console.log("User Connected.");
+    socket.on("test", (data) => {
+        io.emit("Received");
+    })
+});
+
 // start
 // ****************************************************************************
-app.listen(port, () => {
+http.listen(port, () => {
     console.log("Listening on port:", port);
 });
