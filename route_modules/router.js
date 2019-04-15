@@ -85,21 +85,10 @@ router.post('/saveToTable', (req, res) => {
     let table = req.body.table;
     let columns = req.body.columns;
     let data = req.body.data;
-    // let query = `insert into ${table} (${columns.join(',')}) ` +
-    //             `values ${data.map(v => {
-    //                 return '(' + v.values.map(v => `'${v}'`).join(',') + ')';
-    //             })}`;
-
     let insertInto = `insert into ${table} (${columns.join(',')}) ` +
                     `VALUES (${columns.map((e, i) => "$" + (i + 1)).join(',')}) RETURNING *`;
 
-    // console.log("query:", query);clear
-    console.log("insertInto:", insertInto);
     dbhandler.insert(connection, insertInto, data[0].values);
-    let response = dbhandler.query(connection, "select * from participant");
-    response.then(r => {
-        console.log("Row inserted:",  r.rows);
-    });
     res.send("saved to table:", table, "query:", query);
 });
 
@@ -109,10 +98,10 @@ router.post('/randomizeList', (req, res) => {
     let rollResults = [];
 
     while(rollNumber > 0){
-        raffleList = randomizer.shuffle(raffleList);
+        // deep copy
+        raffleList = JSON.parse(JSON.stringify(randomizer.shuffle(raffleList)));
         rollResults.push({
-            // deep copy
-            result: JSON.parse(JSON.stringify(raffleList)),
+            result: raffleList,
             rollNumber: rollNumber
         });
         
