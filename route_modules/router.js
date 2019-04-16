@@ -9,8 +9,6 @@ const useful_middleware = require('./useful-middleware');
 const env = require('../config');
 const dbhandler = require('../route_modules/dbhandler');
 const helper = require('../helper');
-const observable = require('./observable');
- 
  
 // configuration
 // ****************************************************************************
@@ -19,41 +17,15 @@ let password = "pass";
 let host = "localhost";
 let port = "5432";
 let db = "raffle";
-
 let configDb = {
     connectionString: `postgresql://${user}:${password}@${host}:${port}/${db}`
-}
+};
 let connection = dbhandler.setClientConnection(configDb);
- 
  
 // get requests
 // ****************************************************************************
 router.get('/', (req, res) => {
     res.send("<h1>This is a test.</h1>");
-});
- 
-router.get('/date', (req, res) => {
-    let baseURL = env.time.base;
-    let delimiter = "/";
-    let region = req.query.region || "";
-    let country = req.query.country || "";
-    let city = req.query.city || "";
-    if(region.length > 0){
-        baseURL += `${region}${delimiter}`;
-    }
-    if(country.length > 0){
-        baseURL += `${country}${delimiter}`;
-    }
-    baseURL = `${baseURL}${city}`;
- 
-    fetch(baseURL, {method: 'GET'}).then(useful_middleware.checkStatus)
-    .then(response => response.json())
-    .then(response => {
-        res.send(response);
-    })
-    .catch(err => {
-        console.log(err);
-    });
 });
  
 router.get('/trueRandomNumber', (req, res) => {
@@ -80,7 +52,6 @@ router.get('/getTable', (req, res) => {
  
 // post requests
 // ****************************************************************************
- 
 router.post('/saveToTable', (req, res) => {
     let table = req.body.table;
     let columns = req.body.columns;

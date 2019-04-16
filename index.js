@@ -17,8 +17,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors());
 
-app.use(socket_connection.establishConnection);
 app.use(router);
+
+// establish socket connection
+// ****************************************************************************
+socket_connection.establishConnection();
 
 // start
 // ****************************************************************************
