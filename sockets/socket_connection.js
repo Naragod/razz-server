@@ -1,12 +1,15 @@
 
-const listenToEvents = require('./socketEvents');
+
+const listenToCustomEvents = require('./customEvents');
+const listenToDbEvents = require('./dbEvents');
 
 establishConnection = (socket, callback) => {
     console.log("User Connected with id:", socket.id);
     if(callback){
         callback();
     }
-    listenToEvents(socket);
+    listenToCustomEvents(socket);
+    listenToDbEvents(socket);
 };
 
 

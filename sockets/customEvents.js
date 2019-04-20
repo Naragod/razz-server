@@ -1,7 +1,8 @@
 
 const env = require('../config');
 const fetch = require('node-fetch');
-const useful_middleware = require('../route_modules/useful-middleware');
+const randomizer = require('../randomizer/randomizer');
+const checkConnectionStatus = require('../db/useful-middleware').checkStatus;
 
 let getDate = function(params){
     let baseURL = env.time.base;
@@ -18,7 +19,7 @@ let getDate = function(params){
     }
     baseURL = `${baseURL}${city}`;
  
-    return fetch(baseURL, {method: 'GET'}).then(useful_middleware.checkStatus)
+    return fetch(baseURL, {method: 'GET'}).then(checkConnectionStatus)
     .then(response => response.json())
     .catch(err => {
         console.log(err);
@@ -36,9 +37,11 @@ module.exports = function(socket){
     });
 
     // Randomize List
-    socket.on('randomizeList', (rollNumber, raffleList) => {
+    socket.on('randomizeList', data => {
+        let rollNumber = data.rollNumber;
+        let raffleList = data.raffleList;
         let rollResults = [];
-
+        
         while(rollNumber > 0){
             // deep copy
             raffleList = JSON.parse(JSON.stringify(randomizer.shuffle(raffleList)));
@@ -49,7 +52,7 @@ module.exports = function(socket){
             
             rollNumber --;
         }
-    
-        socket.emit({rollResults: rollResults});
+        
+        socket.emit("listReturned", {rollResults: rollResults});
     });
 };
