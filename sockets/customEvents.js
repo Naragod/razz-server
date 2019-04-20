@@ -55,4 +55,12 @@ module.exports = function(socket){
         
         socket.emit("listReturned", {rollResults: rollResults});
     });
+
+    socket.on("getTrueRandomNumber", (min, max, size) => {
+        min = min || 2;
+        max = max || 12;
+        size = size || 1;
+        let result = {randomNumbers: randomizer.getRandomNumbers(min, max, size)};
+        socket.emit("trueRandomNumberReturned", result);
+    });
 };

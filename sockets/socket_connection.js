@@ -1,17 +1,24 @@
 
-
+const authenticate = require('./authentication');
 const listenToCustomEvents = require('./customEvents');
 const listenToDbEvents = require('./dbEvents');
 
+let connectedClients = [];
+
 establishConnection = (socket, callback) => {
-    console.log("User Connected with id:", socket.id);
+    connectedClients.unshift(socket.id);
+    console.log("Connected Clients:", connectedClients)
+    socket.on("disconnect", () => {
+        connectedClients.pop();
+    });
+
+    authenticate(socket);
+    listenToCustomEvents(socket);
+    listenToDbEvents(socket);
     if(callback){
         callback();
     }
-    listenToCustomEvents(socket);
-    listenToDbEvents(socket);
 };
-
 
 module.exports = function(io){
     return {

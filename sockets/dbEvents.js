@@ -1,5 +1,16 @@
-const randomizer = require('../randomizer/randomizer');
 const dbhandler = require('../db/dbhandler');
+// configuration
+// ****************************************************************************
+let user = "postgres";
+let password = "pass";
+let host = "localhost";
+let port = "5432";
+let db = "raffle";
+let configDb = {
+    connectionString: `postgresql://${user}:${password}@${host}:${port}/${db}`
+};
+ 
+let connection = dbhandler.setClientConnection(configDb);
 
 module.exports = function(socket){
     socket.on("saveToTable", (data) => {
