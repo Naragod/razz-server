@@ -3,6 +3,8 @@ const env = require('../config');
 const fetch = require('node-fetch');
 const randomizer = require('../randomizer/randomizer');
 const checkConnectionStatus = require('../db/useful-middleware').checkStatus;
+const tableManager = require('../db/tableManager');
+const TableModel = require('../models/tableModel');
 
 let getDate = function(params){
     let baseURL = env.time.base;
@@ -33,7 +35,6 @@ module.exports = function(socket){
         date.then(response => {
             socket.emit("dateReturned", response);
         });
-        
     });
 
     // Randomize List
@@ -49,12 +50,19 @@ module.exports = function(socket){
                 result: raffleList,
                 rollNumber: rollNumber
             });
-            
+
+            tableManager.saveToTable({
+                table: "roll-result",
+                raffleid: "22",
+                data: raffleList.join(';')
+            });
             rollNumber --;
         }
         
         socket.emit("listReturned", {rollResults: rollResults});
     });
+
+    
 
     socket.on("getTrueRandomNumber", (min, max, size) => {
         min = min || 2;

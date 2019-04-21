@@ -1,8 +1,7 @@
 
 const authenticate = require('./authentication');
+const dbEvents = require('./dbEvents');
 const listenToCustomEvents = require('./customEvents');
-const listenToDbEvents = require('./dbEvents');
-
 let connectedClients = [];
 
 establishConnection = (socket, callback) => {
@@ -13,11 +12,12 @@ establishConnection = (socket, callback) => {
     });
 
     authenticate(socket);
+    // dbEvents(socket);
     listenToCustomEvents(socket);
-    listenToDbEvents(socket);
     if(callback){
         callback();
     }
+    
 };
 
 module.exports = function(io){
