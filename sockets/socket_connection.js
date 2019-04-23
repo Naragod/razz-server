@@ -23,6 +23,11 @@ establishConnection = (socket, callback) => {
 module.exports = function(io){
     return {
         establishConnection: (callback) => {
+            io.use((socket, next) => {
+                // console.log("Handshake", socket.request);
+                next();
+            });
+
             io.on('connection', (socket) => {
                 establishConnection(socket, callback);
             });

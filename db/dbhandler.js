@@ -1,11 +1,7 @@
 const { Client } = require('pg');
- 
+ const promify = require('../helper').promify;
 
-promify = function(callback) {
-    return new Promise((resolve, reject) => {
-        callback(resolve, reject);
-    });
-};
+
 
 module.exports = {
     setClientConnection: (config) => {

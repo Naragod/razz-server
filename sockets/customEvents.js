@@ -51,6 +51,7 @@ module.exports = function(socket){
                 rollNumber: rollNumber
             });
 
+            // database operation
             tableManager.saveToTable({
                 table: "roll-result",
                 raffleid: "22",
@@ -61,8 +62,6 @@ module.exports = function(socket){
         
         socket.emit("listReturned", {rollResults: rollResults});
     });
-
-    
 
     socket.on("getTrueRandomNumber", (min, max, size) => {
         min = min || 2;

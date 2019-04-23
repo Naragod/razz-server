@@ -2,7 +2,6 @@ const tableManager = require('../db/tableManager');
 
 module.exports = function(socket){
     socket.on("saveToTable", (data) => {
-        console.log("AAAA")
         tableManager.saveToTable(data.table, data, () => {
             socket.emit("tableReturned", data.table);
         });

@@ -13,6 +13,8 @@ let configDb = {
     connectionString: `postgresql://${user}:${password}@${host}:${port}/${db}`
 };
 let connection = dbHandler.setClientConnection(configDb);
+// ****************************************************************************
+
 module.exports = {
     getTable(table, onCompletetion){
         dbHandler.query(connection, "select * from " + table)
@@ -29,9 +31,10 @@ module.exports = {
         let insertInto = `insert into "${obj.table}" (${obj.columns.join(',')}) ` +
                         `VALUES (${obj.columns.map((e, i) => "$" + (i + 1)).join(',')}) RETURNING *`;
 
-        dbHandler.insert(connection, insertInto, obj.values).catch(err => err);
-        if(onCompletetion)
-            onCompletetion();
-        console.log("Obj:", obj.values);
+        dbHandler.insert(connection, insertInto, obj.values).then(r => {
+            if(onCompletetion)
+                onCompletetion();
+            console.log("Obj:", obj.values);
+        }).catch(err => err);
     },
 };
