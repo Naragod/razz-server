@@ -4,7 +4,6 @@ const fetch = require('node-fetch');
 const randomizer = require('../randomizer/randomizer');
 const checkConnectionStatus = require('../db/useful-middleware').checkStatus;
 const tableManager = require('../db/tableManager');
-const TableModel = require('../models/tableModel');
 
 let getDate = function(params){
     let baseURL = env.time.base;

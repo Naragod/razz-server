@@ -13,7 +13,7 @@ router.post('/auth', (req, res) => {
         return res.json(authResponseModel(false, "Authentication Failed. Incorrect Username or Password."));
     }
 
-    auth.sign({user: testUser},
+    auth.sign({user: testUser}, {},
         (err, token) => {
             if(err)
                 return res.json(authResponseModel(false, "Authentication Failed."));

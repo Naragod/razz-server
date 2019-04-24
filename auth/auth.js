@@ -15,7 +15,7 @@ module.exports = {
 
     verify: (token, options, callback) => {
         options = options || verifyOptions;
-        jsw.verify(token, secret, options, (err, decoded) => {
+        jwt.verify(token, secret, options, (err, decoded) => {
             callback(err, decoded);
         });
     },

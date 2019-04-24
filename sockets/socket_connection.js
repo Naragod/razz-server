@@ -2,6 +2,9 @@
 const authenticate = require('./authentication');
 const dbEvents = require('./dbEvents');
 const listenToCustomEvents = require('./customEvents');
+const authResponseModel = require('../models/authResponseModel');
+const auth = require('../auth/auth');
+
 let connectedClients = [];
 
 establishConnection = (socket, callback) => {
@@ -24,7 +27,17 @@ module.exports = function(io){
     return {
         establishConnection: (callback) => {
             io.use((socket, next) => {
-                // console.log("Handshake", socket.request);
+                let handshake = socket.handshake.query;
+                if(!handshake || !handshake.token){
+                    next(new Error("Authentication Failed."));
+                }
+                auth.verify(handshake.token, {}, (err, decoded) => {
+                    if(err){
+                        socket.emit("disconnect", authResponseModel());
+                        next(new Error("Authentication Failed: Incorrect Token."));
+                    }
+                    socket.decoded = decoded;
+                });
                 next();
             });
 
