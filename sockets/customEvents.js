@@ -33,7 +33,7 @@ module.exports = function(socket){
         let date = getDate(params);
         date.then(response => {
             socket.emit("dateReturned", response);
-        });
+        }).catch(err => console.log("Date:", err));
     });
 
     // Randomize List

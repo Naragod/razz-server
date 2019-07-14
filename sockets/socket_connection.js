@@ -1,6 +1,6 @@
 
 const authenticate = require('./authentication');
-const dbEvents = require('./dbEvents');
+const dbEvents = require('./dbEvents'); 
 const listenToCustomEvents = require('./customEvents');
 const authResponseModel = require('../models/authResponseModel');
 const auth = require('../auth/auth');

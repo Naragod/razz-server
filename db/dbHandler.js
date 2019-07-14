@@ -10,7 +10,9 @@ promify = function(callback) {
 module.exports = {
     setClientConnection: (config) => {
         let client = new Client(config);
-        client.connect();
+        client.connect()
+            .then(() => console.log("Connected to DB."))
+            .catch(error => { console.log("Could not connect to DB"); return error;});
         return client;
     },
  
