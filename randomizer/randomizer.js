@@ -1,28 +1,28 @@
-
-
 module.exports = {
-    getRandomNumbers: function(min=0, max=1, size=1){
-        let result = [];
-        while(size !== 0){
-            result.push(Math.floor(Math.random() * (max - min) + min));
-            size --;
-        }
-        return result;
-    },
-
-    shuffle: (array) => {
-        let end = array.length;
-        if(end === 0){
-            return false;
-        }
-        while(end !== 0){
-            end --;
-
-            let i = Math.floor(Math.random() * array.length);
-            let temp = array[end];
-            array[end] = array[i];
-            array[i] = temp;
-        }
-        return array;
+  getRandomNumbers(min = 0, max = 1, size = 1) {
+    const result = [];
+    let counter = size;
+    while (counter !== 0) {
+      result.push(Math.floor(Math.random() * (max - min) + min));
+      counter -= 1;
     }
+    return result;
+  },
+
+  shuffle: (array) => {
+    const result = array;
+    let end = array.length;
+    if (end === 0) {
+      return false;
+    }
+    while (end !== 0) {
+      end -= 1;
+
+      const i = Math.floor(Math.random() * result.length);
+      const temp = result[end];
+      result[end] = result[i];
+      result[i] = temp;
+    }
+    return result;
+  },
 };

@@ -1,6 +1,1 @@
-
-
-module.exports = function(socket) {
-    
-
-};
+module.exports = (socket) => {};

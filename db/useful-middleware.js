@@ -1,14 +1,10 @@
+// module.exports = {
+//   checkStatus: (res) => {
+//     if (res.ok) return res;
 
-
-module.exports = {
-    checkStatus: (res) => {
-        if(res.ok)
-            return res;
-        else{
-            throw {
-                error: "Error: Request Failed.",
-                response: res
-            };
-        }
-    }
-}
+//     throw {
+//       error: 'Error: Request Failed.',
+//       response: res,
+//     };
+//   },
+// };
